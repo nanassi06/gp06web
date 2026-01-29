@@ -125,10 +125,11 @@
       <!-- Search Bar Section -->
       <div class="bg-white rounded-md shadow-md flex w-full max-w-md sm:max-w-lg md:max-w-xl z-10 mt-10">
         <i data-lucide="search" class="w-5 h-5 ml-3 mt-2 text-gray-500"></i>
-        <input type="text" placeholder="Search for properties..."
+        <input type="text" id="search" onkeyup="searchFunction()" placeholder="Search for properties..."
           class="flex-1 px-3 py-2 focus:outline-none placeholder-gray-500 text-black text-sm md:text-base" />
         <button
-          class="bg-red-600 text-white px-3 md:px-4 py-2 rounded-r-md hover:bg-red-700 cursor-pointer text-sm md:text-base">
+          class="bg-red-600 text-white px-3 md:px-4 py-2 rounded-r-md hover:bg-red-700 cursor-pointer text-sm md:text-base"
+          onclick="searchFunction(true)">
           Search
         </button>
       </div>
@@ -489,12 +490,31 @@
   </div>
 </body>
 <script>
-  const menuBtn = document.getElementById("menu-btn");
-  const menu = document.getElementById("menu");
 
-  menuBtn.addEventListener("click", () => {
-    menu.classList.toggle("hidden");
-  });
+  function searchFunction(scroll = false) {
+    const input = document.getElementById("search");
+    const filter = input.value.toLowerCase();
+    const propertyCards = document.querySelectorAll("#catalogs .grid > div");
+
+    propertyCards.forEach((card) => {
+      const title = card.querySelector("h3").innerText.toLowerCase();
+
+      // If search input is empty, show all property cards
+      if (filter === "" || title.includes(filter)) {
+        card.style.display = "";
+      } else {
+        card.style.display = "none";
+      }
+    });
+
+    // Scroll only when triggered by button
+    if (scroll) {
+      const catalogsSection = document.getElementById("catalogs");
+      if (catalogsSection) {
+        catalogsSection.scrollIntoView({ behavior: "smooth" });
+      }
+    }
+  }
 </script>
 
 <script src="https://unpkg.com/lucide@latest"></script>
